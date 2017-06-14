@@ -1,4 +1,4 @@
-safe_require 'sequel', 'gem install sequel'
+require 'sequel'
 require 'sequel/adapters/postgres'
 
 # Management of Postgres Sockets

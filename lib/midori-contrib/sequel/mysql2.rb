@@ -1,4 +1,4 @@
-safe_require 'sequel', 'gem install sequel'
+require 'sequel'
 require 'sequel/adapters/mysql2'
 
 # Management of MySQL Sockets
