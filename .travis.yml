@@ -1,0 +1,36 @@
+language: ruby
+rvm: 2.2.7
+sudo: false
+matrix:
+  include:
+    - rvm: 2.2.7
+    - rvm: 2.3.4
+    - rvm: 2.4.1
+    - rvm: ruby-head
+  allow_failures:
+    - rvm: ruby-head
+  fast_finish: true
+
+os:
+  - linux
+
+services:
+  - postgresql
+  - mysql
+  - redis-server
+
+before_install:
+  - gem install bundler
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - mysql -e 'create database if not exists travis_ci_test;'
+
+script:
+  - gem list -l
+  - bundle exec rake
+  - bundle exec codeclimate-test-reporter
+  - gem build ./em-midori.gemspec
+
+bundler_args: --jobs 1 --retry 3
+
+notifications:
+  email: false
