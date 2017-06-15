@@ -12,12 +12,12 @@ YARD::Rake::YardocTask.new do |t|
 end
 
 task :build do
-  puts `gem build murasaki.gemspec`
+  puts `gem build midori-contrib.gemspec`
 end
 
 task :install do
-  puts `gem build murasaki.gemspec`
-  puts `gem install ./murasaki-#{MidoriContrib::VERSION}.gem`
+  puts `gem build midori-contrib.gemspec`
+  puts `gem install ./midori-contrib-#{MidoriContrib::VERSION}.gem`
 end
 
 task :count do
