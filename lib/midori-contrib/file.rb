@@ -5,7 +5,7 @@ module MidoriContrib
     # Init File object
     # @param [Array] args same args like File.new
     def initialize(*args)
-      @file = File.new(*args)
+      @file = ::File.new(*args)
     end
 
     # read file
