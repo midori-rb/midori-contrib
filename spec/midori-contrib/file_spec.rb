@@ -1,12 +1,12 @@
 require './spec/spec_helper'
 require 'midori-contrib/file'
 
-RSpec.describe MidoriContrib::File do
+RSpec.describe Midori::Contrib::File do
   describe 'extension' do
     it 'should read file in correct order' do
       answer = []
       async :test_file_read do
-        file = MidoriContrib::File.new('./Rakefile')
+        file = Midori::Contrib::File.new('./Rakefile')
         answer << file.read
         file.close
         EventLoop.stop
@@ -19,14 +19,14 @@ RSpec.describe MidoriContrib::File do
 
     it 'should raise error when unable to open' do
       expect {
-        MidoriContrib::File.new('./TooYoungTooSimple', 'r')
+        Midori::Contrib::File.new('./TooYoungTooSimple', 'r')
       }.to raise_error(Errno::ENOENT)
     end
 
     it 'should write file in correct order' do
       answer = []
       async :test_file_write do
-        file = MidoriContrib::File.new('/tmp/SometimesNaive', 'w+')
+        file = Midori::Contrib::File.new('/tmp/SometimesNaive', 'w+')
         answer << file.write('hello')
         file.close
         EventLoop.stop
@@ -39,7 +39,7 @@ RSpec.describe MidoriContrib::File do
   end
 
   it 'could deal with raw IO object directly' do
-    file = MidoriContrib::File.new('/tmp/SometimesNaive', 'w+')
+    file = Midori::Contrib::File.new('/tmp/SometimesNaive', 'w+')
     expect(file.raw.rewind).to eq(0)
     file.close
   end
