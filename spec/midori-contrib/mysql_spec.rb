@@ -5,7 +5,7 @@ RSpec.describe 'Sequel' do
     it 'do query' do
       answer = []
       async :test_mysql do
-        @mysql = Sequel.connect('mysql2://travis@localhost:5432/travis_ci_test')
+        @mysql = Sequel.connect('mysql2://root@localhost:5432/ci_test')
 
         @mysql.run <<-SQL
           DROP TABLE IF EXISTS tests;
