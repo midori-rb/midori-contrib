@@ -5,7 +5,7 @@ RSpec.describe 'Sequel' do
     it 'do query' do
       answer = []
       async :test_sequel do
-        @postgres = Sequel.connect('postgres://postgres@localhost:5432/travis_ci_test')
+        @postgres = Sequel.connect('postgres://postgres@localhost:5432/ci_test')
 
         @postgres.run <<-SQL
           DROP TABLE IF EXISTS products;

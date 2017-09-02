@@ -43,7 +43,7 @@ RSpec.describe 'Sequel' do
     it 'query something illegal' do
       async :test_mysql do
         expect {
-          @mysql = Sequel.connect('mysql2://travis@localhost:5432/travis_ci_test')
+          @mysql = Sequel.connect('mysql2://root@localhost:5432/ci_test')
           @mysql.run <<-SQL
             SELECT * FROM NOWHERE;
           SQL
@@ -57,7 +57,7 @@ RSpec.describe 'Sequel' do
     it 'query acync' do
       expect do
         @answer = []
-        @mysql = Sequel.connect('mysql2://travis@localhost:5432/travis_ci_test')
+        @mysql = Sequel.connect('mysql2://root@localhost:5432/ci_test')
         async :test_mysql do
           @answer << (@mysql.run <<-SQL
             SELECT COUNT(*) FROM tests;
