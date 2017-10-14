@@ -1,6 +1,6 @@
 # midori contrib
 
-![Logo and Slogan](https://github.com/heckpsi-lab/midori-contrib/raw/master/.resources/slogan.png)
+![Logo and Slogan](https://github.com/midori-rb/midori-contrib/raw/master/.resources/slogan.png)
 
 
 ## Description
