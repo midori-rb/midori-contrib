@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
   s.homepage                 = 'https://github.com/heckpsi-lab/midori-contrib'
   s.metadata                 = { 'issue_tracker' => 'https://github.com/heckpsi-lab/midori-contrib/issues' }
   s.license                  = 'MIT'
-  s.add_runtime_dependency     'em-midori', '~> 0.3'
+  s.add_runtime_dependency     'midori.rb', '~> 0.4'
 end
