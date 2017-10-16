@@ -3,7 +3,7 @@ module Midori
   # Midori Contrib Module
   module Contrib
     # Current Version Code
-    VERSION = '0.1.1'.freeze
+    VERSION = '0.1.2'.freeze
   end
 end
 
