@@ -21,12 +21,13 @@ module Sequel
       # @param [Hash] opts optional options
       # @return [Mysql2::Result] MySQL results
       def _execute(conn, sql, opts, &block)
-        if EventLoop.running?
-          # Nonblock usage
-          return _execute_nonblock(conn, sql, opts, &block)
-        else
+        # _execute_nonblock(conn, sql, opts, &block)
+        if Fiber.current == EventLoop.root_fiber
           # Block usage
           return _execute_block(conn, sql, opts, &block)
+        else
+          # Nonblock usage
+          return _execute_nonblock(conn, sql, opts, &block)
         end
       end
 
