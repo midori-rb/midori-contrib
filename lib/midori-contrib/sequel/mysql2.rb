@@ -11,6 +11,7 @@ module Sequel
   module Mysql2
     # Midori Extension of sequel MySQL through meta programming
     class Database
+      alias_method :_execute, :_execute_block
       # Execute the given SQL on the given connection.  If the :type
       # option is :select, yield the result of the query, otherwise
       # yield the connection if a block is given.
@@ -18,7 +19,24 @@ module Sequel
       # @param [String] sql sql query
       # @param [Hash] opts optional options
       # @return [Mysql2::Result] MySQL results
-      def _execute(conn, sql, opts) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+      def _execute(conn, sql, opts)
+        if EventLoop.root_fiber == Fiber.current
+          # Block usage
+          _execute_block(conn, sql, opts)
+        else
+          # Nonblock usage
+          _execute_nonblock(conn, sql, opts)
+        end
+      end
+
+      # Execute the given SQL on the given connection.  If the :type
+      # option is :select, yield the result of the query, otherwise
+      # yield the connection if a block is given.
+      # @param [Mysql2::Client] conn connection to database
+      # @param [String] sql sql query
+      # @param [Hash] opts optional options
+      # @return [Mysql2::Result] MySQL results
+      def _execute_nonblock(conn, sql, opts) # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
         begin
           # :nocov:
           stream = opts[:stream]

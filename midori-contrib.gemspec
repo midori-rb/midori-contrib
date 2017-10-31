@@ -16,4 +16,5 @@ Gem::Specification.new do |s|
   s.metadata                 = { 'issue_tracker' => 'https://github.com/midori-rb/midori-contrib/issues' }
   s.license                  = 'MIT'
   s.add_runtime_dependency     'midori.rb', '~> 0.4'
+  s.add_runtime_dependency     'murasaki', '~> 0.2'
 end
