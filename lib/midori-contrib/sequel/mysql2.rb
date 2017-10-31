@@ -11,7 +11,7 @@ module Sequel
   module Mysql2
     # Midori Extension of sequel MySQL through meta programming
     class Database
-      alias_method :_execute, :_execute_block
+      alias_method :_execute_block, :_execute
       # Execute the given SQL on the given connection.  If the :type
       # option is :select, yield the result of the query, otherwise
       # yield the connection if a block is given.
