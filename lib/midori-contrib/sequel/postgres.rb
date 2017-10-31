@@ -11,7 +11,19 @@ class Sequel::Postgres::Adapter
   # @param [String] sql sql request
   # @param [Array] args args to send
   # @return [Array] sql query result
+  alias_method :execute_query_block, :execute_query
+
   def execute_query(sql, args)
+    if Fiber.current == EventLoop.root_fiber
+      # Block usage
+      return execute_query_block(sql, args)
+    else
+      # Nonblock usage
+      return execute_query_nonblock(sql, args)
+    end
+  end
+
+  def execute_query_nonblock(sql, args)
     @db.log_connection_yield(sql, self, args) do
       if POSTGRES_SOCKETS[self].nil?
         POSTGRES_SOCKETS[self] = IO::open(socket)
