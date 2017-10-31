@@ -25,7 +25,9 @@ module Sequel
           _execute_block(conn, sql, opts)
         else
           # Nonblock usage
-          _execute_nonblock(conn, sql, opts)
+          Fiber.new do
+            _execute_nonblock(conn, sql, opts)
+          end.resume
         end
       end
 
