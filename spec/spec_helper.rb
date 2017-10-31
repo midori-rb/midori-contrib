@@ -7,7 +7,7 @@ SimpleCov.start do
 end
 Bundler.require
 require 'timeout'
-require 'midori'
+require 'murasaki'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
