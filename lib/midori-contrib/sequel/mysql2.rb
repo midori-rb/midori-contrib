@@ -71,13 +71,13 @@ module Sequel
                 MYSQL_SOCKETS[conn.socket] = IO::open(conn.socket)
               end
               socket = MYSQL_SOCKETS[conn.socket]
-              Fiber.scheduler.wait_io(socket, :WRITABLE, 5)
+              Fiber.scheduler.io_wait(socket, :WRITABLE, 5)
               conn.query(sql,
                 database_timezone: timezone,
                 application_timezone: Sequel.application_timezone,
                 stream: stream,
                 async: true)
-              Fiber.scheduler.wait_io(socket, :READABLE, 5)
+              Fiber.scheduler.io_wait(socket, :READABLE, 5)
               conn.async_result
             end
           end

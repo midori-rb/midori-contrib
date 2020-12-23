@@ -29,9 +29,9 @@ class Sequel::Postgres::Adapter
         POSTGRES_SOCKETS[self] = IO::open(socket)
       end
       socket_obj = POSTGRES_SOCKETS[self]
-      Fiber.scheduler.wait_io(socket_obj, IO::WRITABLE, 5)
+      Fiber.scheduler.io_wait(socket_obj, IO::WRITABLE, 5)
       send_query(sql) unless is_busy
-      Fiber.scheduler.wait_io(socket_obj, IO::READABLE, 5)
+      Fiber.scheduler.io_wait(socket_obj, IO::READABLE, 5)
       resolve.call(get_result)
     end
   end
