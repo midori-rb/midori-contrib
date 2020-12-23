@@ -19,22 +19,15 @@ module Hiredis
       # Do redis query
       # @param [Array] args equal to Hiredis write args
       def query(args)
-        await(Promise.new do |resolve|
-          read_flag = false
-          data = pre_write(args)
-          written = 0
-          EventLoop.register(@sock, :rw) do |monitor|
-            if read_flag && monitor.readable?
-              # Reading
-              _read(resolve, @sock)
-            end
-            if !read_flag && monitor.writable?
-              # Writing
-              written += @sock.write_nonblock(data[written..-1])
-              read_flag = true if written == string_size(data)
-            end
-          end
-        end)
+        data = pre_write(args)
+        @sock.write(data)
+
+        while (reply = @reader.gets) == false
+          Fiber.scheduler.io_wait(@sock, IO::READABLE, 5)
+          @reader.feed @sock.read_nonblock(1024)
+        end
+
+        reply
       end
 
       private
@@ -49,15 +42,6 @@ module Hiredis
           data = command.join(COMMAND_DELIMITER) + COMMAND_DELIMITER
           data.force_encoding('binary') if data.respond_to?(:force_encoding)
           data
-        end
-
-        def _read(resolve, sock)
-          @reader.feed @sock.read_nonblock(1024)
-          reply = @reader.gets
-          if reply
-            EventLoop.deregister(sock)
-            resolve.call(reply)
-          end
         end
     end
   end

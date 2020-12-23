@@ -3,7 +3,7 @@ require './lib/midori-contrib'
 Gem::Specification.new do |s|
   s.name                     = 'midori-contrib'
   s.version                  = MidoriContrib::VERSION
-  s.required_ruby_version    = '>=2.2.6'
+  s.required_ruby_version    = '>=3.0.0.rc1'
   s.date                     = Time.now.strftime('%Y-%m-%d')
   s.summary                  = 'Various extensions for midori'
   s.description              = 'Various extensions officially supported for midori'
@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
   s.homepage                 = 'https://github.com/midori-rb/midori-contrib'
   s.metadata                 = { 'issue_tracker' => 'https://github.com/midori-rb/midori-contrib/issues' }
   s.license                  = 'MIT'
-  s.add_runtime_dependency     'murasaki', '~> 0.2'
+  s.add_runtime_dependency     'evt', '~> 0.3.0'
 end

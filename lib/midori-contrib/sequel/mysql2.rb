@@ -22,7 +22,7 @@ module Sequel
       # @return [Mysql2::Result] MySQL results
       def _execute(conn, sql, opts, &block)
         # _execute_nonblock(conn, sql, opts, &block)
-        if Fiber.current == EventLoop.root_fiber
+        if Fiber.scheduler.nil?
           # Block usage
           return _execute_block(conn, sql, opts, &block)
         else
@@ -71,29 +71,14 @@ module Sequel
                 MYSQL_SOCKETS[conn.socket] = IO::open(conn.socket)
               end
               socket = MYSQL_SOCKETS[conn.socket]
-              await(Promise.new do |resolve|
-                count = 0
-                EventLoop.register(socket, :rw) do
-                  if (count == 0)
-                    # Writable
-                    count += 1
-                    conn.query(sql,
-                              database_timezone: timezone,
-                              application_timezone: Sequel.application_timezone,
-                              stream: stream,
-                              async: true)
-                  else
-                    # Readable
-                    begin
-                      EventLoop.deregister(socket)
-                      resolve.call(conn.async_result)
-                    rescue ::Mysql2::Error => e
-                      resolve.call(PromiseException.new(e))
-                      next
-                    end
-                  end
-                end
-              end)
+              Fiber.scheduler.wait_io(socket, :WRITABLE, 5)
+              conn.query(sql,
+                database_timezone: timezone,
+                application_timezone: Sequel.application_timezone,
+                stream: stream,
+                async: true)
+              Fiber.scheduler.wait_io(socket, :READABLE, 5)
+              conn.async_result
             end
           end
 

@@ -14,7 +14,7 @@ class Sequel::Postgres::Adapter
   alias_method :execute_query_block, :execute_query
 
   def execute_query(sql, args)
-    if Fiber.current == EventLoop.root_fiber
+    if Fiber.scheduler.nil?
       # Block usage
       return execute_query_block(sql, args)
     else
@@ -28,30 +28,11 @@ class Sequel::Postgres::Adapter
       if POSTGRES_SOCKETS[self].nil?
         POSTGRES_SOCKETS[self] = IO::open(socket)
       end
-      socket_object = POSTGRES_SOCKETS[self]
-      await(Promise.new do |resolve|
-        count = 0
-        EventLoop.register(socket_object, :rw) do
-          begin
-            if (count == 0)
-              # Writable
-              unless is_busy
-                send_query(sql)
-                count += 1
-              end
-            else
-              # Readable
-              EventLoop.deregister(socket_object)
-              resolve.call(get_result)
-            end
-          # For extra errors
-          # :nocov:
-          rescue => e
-            resolve.call(PromiseException.new(e))
-          # :nocov:
-          end
-        end
-      end)
+      socket_obj = POSTGRES_SOCKETS[self]
+      Fiber.scheduler.wait_io(socket_obj, IO::WRITABLE, 5)
+      send_query(sql) unless is_busy
+      Fiber.scheduler.wait_io(socket_obj, IO::READABLE, 5)
+      resolve.call(get_result)
     end
   end
 end
