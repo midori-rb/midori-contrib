@@ -3,7 +3,7 @@ require './lib/midori-contrib'
 Gem::Specification.new do |s|
   s.name                     = 'midori-contrib'
   s.version                  = MidoriContrib::VERSION
-  s.required_ruby_version    = '>=3.0.0.dev'
+  s.required_ruby_version    = '>=3.0.0'
   s.date                     = Time.now.strftime('%Y-%m-%d')
   s.summary                  = 'Various extensions for midori'
   s.description              = 'Various extensions officially supported for midori'
