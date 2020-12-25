@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
   s.homepage                 = 'https://github.com/midori-rb/midori-contrib'
   s.metadata                 = { 'issue_tracker' => 'https://github.com/midori-rb/midori-contrib/issues' }
   s.license                  = 'MIT'
-  s.add_runtime_dependency     'evt', '~> 0.3.0'
+  s.add_runtime_dependency     'evt', '~> 0.4.0'
 end
