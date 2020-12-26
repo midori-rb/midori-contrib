@@ -4,7 +4,7 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
+        - ruby
   fixme:
     enabled: true
   rubocop:
@@ -12,6 +12,6 @@ engines:
     channel: rubocop-0-50
 ratings:
   paths:
-  - "**.rb"
+    - "**.rb"
 exclude_paths:
-- spec/
+  - spec/
